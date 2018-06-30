@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Pumpkin List (coming)</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_shops">Shop manage</string>
+    <string name="action_delete_shop">Delete shop</string>
+    <string name="action_delete_list">Delete shopping list</string>
+
+    <string name="button_ok">OK</string>
+    <string name="button_cancel">Cancel</string>
+
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
+
+    <string name="menu_show_purchase_list">Active Lists</string>
+    <string name="menu_show_purchase_archive">Archive Lists</string>
+    <string name="menu_show_purchase_inbox">Inbox Lists</string>
+    <string name="menu_show_purchase_outbox">Outbox Lists</string>
+    <string name="menu_show_shops">My shops</string>
+    <string name="menu_show_places">My places</string>
+    <string name="menu_show_settings">Settings</string>
+    <string name="menu_logout">Logout</string>
+
+    <!--Login-->
+    <string name="login_email">E-mail</string>
+    <string name="login_password">Password</string>
+    <string name="login_remember">Remember my on this device</string>
+    <string name="login_button_login">LOGIN</string>
+    <string name="login_button_continue">Continue without registration</string>
+
+    <!--Login register-->
+    <string name="login_register_description">Please complete lines below: </string>
+    <string name="login_register_email">E-mail</string>
+    <string name="login_register_password">Password</string>
+    <string name="login_register_button">REGISTER</string>
+
+    <!--Purchase edit-->
+    <string name="purchase_edit_new_goods_hint">Enter goods label</string>
+    <string name="purchase_edit_add_button">Add</string>
+    <string name="purchase_edit_new_list_hint">New shopping list</string>
+    <string name="purchase_edit_new_list_description_hint">description</string>
+    <string name="purchase_edit_new_list_default">Shopping list</string>
+    <string name="purchase_edit_this_list_default">this list</string>
+    <string name="purchase_edit_create_new_list">Create</string>
+    <string name="purchase_edit_update_list">Update</string>
+    <string name="purchase_edit_delete_list">Delete</string>
+    <string name="purchase_edit_alert_delete_title">Delete shopping list?</string>
+    <string name="purchase_edit_alert_delete_description">Are you sure you want to delete %s?</string>
+    <string name="purchase_edit_item_quantity">quantity</string>
+    <string name="purchase_edit_item_title">Edit goods</string>
+    <string name="purchase_edit_item_check_bought">bought</string>
+    <string name="purchase_edit_item_button_delete">Delete</string>
+    <string name="purchase_edit_item_button_restore">Restore</string>
+    <string name="purchase_edit_alert_done_title">Purchase made?</string>
+    <string name="purchase_edit_alert_done_message">Shopping has been done?</string>
+    <string name="purchase_edit_alert_continue_title">Continue shopping?</string>
+    <string name="purchase_edit_alert_continue_message">Continue edit shopping list?</string>
+    <string name="purchase_edit_button_appointment">Reminder</string>
+    <string name="purchase_edit_button_done">Shopping done</string>
+    <string name="purchase_edit_button_continue">Continue shopping</string>
+    <string name="purchase_edit_create_empty_title">Shopping list is empty!</string>
+    <string name="purchase_edit_create_empty_message">Can\'t create empty shopping list!</string>
+    <string name="purchase_edit_save_empty_message">Can\'t save empty shopping list!</string>
+    <string name="purchase_edit_bottom_set_date">Set date</string>
+    <string name="purchase_edit_bottom_set_time">Set time</string>
+    <string name="purchase_edit_bottom_fail_time_toast">Please, select a future time for notification</string>
+    <string name="purchase_edit_bottom_time_label">Remind at the time:</string>
+    <string name="purchase_edit_bottom_shop_label">Remind near the:</string>
+    <string name="purchase_edit_bottom_place_label">Remind on the way to:</string>
+    <string name="purchase_edit_bottom_create_list">Create list</string>
+
+    <!--Map Activity-->
+    <string name="create_alert_title">Marker not select</string>
+    <string name="create_alert_massage">First you need to select a location</string>
+    <string name="map_search_button">Search</string>
+    <string name="map_search_fail">Place not found</string>
+    <string name="map_save_empty_location">Can\'t save empty location!</string>
+
+    <!--Shop edit-->
+    <string name="shop_edit_name_hint">Shop name</string>
+    <string name="shop_edit_new_shop_default">Nameless shop</string>
+    <string name="shop_edit_this_shop_default">this shop</string>
+    <string name="shop_edit_alert_delete_title">Delete shopping place?</string>
+    <string name="shop_edit_alert_delete_description">Are you sure you want to delete %s?</string>
+    <string name="shop_edit_spinner_default_entry">Select shop</string>
+
+    <!--Place edit-->
+    <string name="place_edit_name_hint">Place name</string>
+    <string name="place_edit_new_place_default">Nameless place</string>
+    <string name="place_edit_this_place_default">this place</string>
+    <string name="place_edit_alert_delete_title">Delete this place?</string>
+    <string name="place_edit_alert_delete_description">Are you sure you want to delete %s?</string>
+    <string name="place_edit_spinner_default_entry">Select places</string>
+
+    <!--Notification-->
+    <string name="notification_alarm_description">Time for shopping</string>
+    <string name="notification_gps_description">Do not forget about shopping</string>
+
+</resources>
