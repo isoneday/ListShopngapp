@@ -5,18 +5,19 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 
 import com.teamproject.plastikproject.R;
-import com.teamproject.plastikproject.fragments.PurchaseEditFragment;
-import com.teamproject.plastikproject.fragments.PurchaseManageFragment;
+import com.teamproject.plastikproject.fragments.PurchaseEditFragmentbaru;
+import com.teamproject.plastikproject.fragments.PurchaseManageFragmentoribaru;
 import com.teamproject.plastikproject.helpers.ActivityHelper;
 import com.teamproject.plastikproject.helpers.AppConstants;
 import com.teamproject.plastikproject.helpers.SharedPrefHelper;
 
+
 /**
  * Created by rage on 08.02.15.
  */
-public class PurchaseActivity extends BaseActivity implements PurchaseManageFragment.OnPurchaseListMainFragmentListener, FragmentManager.OnBackStackChangedListener {
+public class PurchaseActivity extends BaseActivity implements PurchaseManageFragmentoribaru.OnPurchaseListMainFragmentListener, FragmentManager.OnBackStackChangedListener {
     private static final String TAG = PurchaseActivity.class.getSimpleName();
-    private PurchaseEditFragment purchaseListEditFragment;
+    private PurchaseEditFragmentbaru purchaseListEditFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class PurchaseActivity extends BaseActivity implements PurchaseManageFrag
 
     @Override
     protected void onResume() {
+        super.onResume();
         ActivityHelper.getInstance().setIsMainActivity(true);
         superOnResume();
         SharedPrefHelper sharedPrefHelper = SharedPrefHelper.getInstance();
@@ -65,7 +67,7 @@ public class PurchaseActivity extends BaseActivity implements PurchaseManageFrag
 
     @Override
     public void onPurchaseListMainFragmentClickListener() {
-        purchaseListEditFragment = new PurchaseEditFragment();
+        purchaseListEditFragment = new PurchaseEditFragmentbaru();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, purchaseListEditFragment)
                 .addToBackStack(AppConstants.BACK_STACK_PURCHASE)
@@ -80,7 +82,7 @@ public class PurchaseActivity extends BaseActivity implements PurchaseManageFrag
     private void showPurchaseLists(){
         activityHelper.setGlobalId(activityHelper.getPurchaseMenuId());
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, new PurchaseManageFragment())
+                .replace(R.id.container, new PurchaseManageFragmentoribaru())
                 .commit();
     }
 
@@ -90,7 +92,7 @@ public class PurchaseActivity extends BaseActivity implements PurchaseManageFrag
             getSupportFragmentManager().popBackStack();
             purchaseListEditFragment = null;
         }
-        purchaseListEditFragment = PurchaseEditFragment.newInstance(id);
+        purchaseListEditFragment = PurchaseEditFragmentbaru.newInstance(id);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, purchaseListEditFragment)
                 .addToBackStack(AppConstants.BACK_STACK_PURCHASE)

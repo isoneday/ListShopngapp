@@ -9,6 +9,14 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
+
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+
+
+
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
@@ -16,30 +24,29 @@
     <application
         android:name=".AppClass"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_baggit"
         android:label="@string/app_name"
         android:theme="@style/ASlistTheme" >
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="@string/google_api_key" />
+        <!--<meta-data-->
+            <!--android:name="com.google.android.maps.v2.API_KEY"-->
+            <!--android:value="@string/google_maps_key" />-->
+    <activity android:name=".activities.PurchaseActivity"></activity>
+        <activity android:name=".activities.MapActivityOri"></activity>
+        <activity android:name=".activities.PlacesActivityOri"></activity>
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
-        <activity
-            android:name=".activities.PurchaseActivity"
-            android:label="@string/app_name"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask" >
+        <activity android:name=".plastik.activity.MapSmartAreActivity">
+
         </activity>
         <activity
             android:name=".activities.PlacesActivity"
@@ -59,21 +66,8 @@
             android:name=".services.GpsAppointmentService"
             android:process=":gps_appointment_service" />
 
-        <service android:name=".services.WritePurchaseListService"
-            android:exported="false"/>
-
         <service android:name=".services.GeoLocationService"
             android:exported="false"/>
-
-        <receiver android:name=".broadcasts.AutoStartBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name=".broadcasts.AlarmBroadcastReceiver" >
-
-        </receiver>
 
         <provider
             android:name=".helpers.ShoppingContentProvider"
@@ -86,6 +80,58 @@
         <meta-data
             android:name="com.crashlytics.ApiKey"
             android:value="8320f4f5acb21ff81d1b7b411decc230244e2fae" />
+
+
+        <activity android:name=".plastik.ShopingScheduleActivity"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".plastik.HalamanUtamaActivity"></activity>
+        <activity android:name=".plastik.RegisterActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+        <activity android:name=".plastik.LoginActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+        <activity android:name=".plastik.activity.SplashScreenActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+<activity android:name=".plastik.activity.HalamanBaggingActivity"
+    android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".plastik.activity.ShoppingLocationActivity"></activity>
+        <receiver android:name=".broadcasts.AutoStartBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".broadcasts.AlarmBroadcastReceiver" >
+
+        </receiver>
 
     </application>
 

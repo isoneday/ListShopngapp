@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+   >
+
+
+    <fragment
+
+        android:id="@+id/map"
+        android:layout_marginBottom="50dp"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/baground"
+        android:orientation="vertical"
+
+        android:padding="10dp">
+
+
+        <TextView
+            android:textColor="@color/colorPrimaryDark"
+
+            android:id="@+id/lokasiawal"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:maxLines="1"
+            android:paddingLeft="7dp"
+            android:drawableLeft="@drawable/ic_location_on_black_24dp1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/backgroundedittext"
+            android:gravity="center"
+            android:hint="Posisi Anda  ?"/>
+
+        <EditText
+            android:id="@+id/tujuan"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:lines="1"
+            android:textColor="@color/colorPrimaryDark"
+android:visibility="gone"
+            android:inputType="text"
+            android:paddingLeft="7dp"
+            android:drawableLeft="@drawable/ic_location_on_black_24dp1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/backgroundedittext"
+            android:gravity="center"
+            android:hint="catatan ?"/>
+ <TextView
+            android:id="@+id/lokasitujuan"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:lines="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+     android:drawableLeft="@drawable/ic_location_on_black_24dp1"
+
+     android:layout_marginTop="5dp"
+            android:background="@drawable/backgroundedittext"
+            android:gravity="center"
+            android:hint="Mau Kemana ?"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal"
+            tools:mockup_opacity="5dp"
+            >
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+android:visibility="gone"
+        android:layout_above="@+id/requestorder"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/backgroundedittext"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:padding="5dp"
+            android:layout_weight="1"
+            android:text="Price"
+
+
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:id="@+id/txtjenissos"
+            android:layout_marginRight="5dp"
+            android:gravity="right"
+            android:text="Rp.0"
+
+            />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/requestorder"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:textSize="20dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="Search"
+        android:textColor="#fff"/>
+
+</RelativeLayout>

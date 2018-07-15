@@ -17,9 +17,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.teamproject.plastikproject.R;
 import com.teamproject.plastikproject.activities.MapActivity;
 import com.teamproject.plastikproject.adapters.PlaceAdapter;
@@ -28,6 +25,10 @@ import com.teamproject.plastikproject.helpers.ContentHelper;
 import com.teamproject.plastikproject.helpers.ShoppingContentProvider;
 import com.teamproject.plastikproject.helpers.SqlDbHelper;
 import com.teamproject.plastikproject.model.PlacesModel;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Created by rage on 08.02.15. Create by task: 004

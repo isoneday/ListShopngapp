@@ -27,6 +27,9 @@ public final class AppConstants {
     public static final int LOGIN_BUTTON_CONTINUE = 0;
 
     public static final String EXTRA_PLACE_ID = "extraShopId";
+    public static final String EXTRA_PLACE_LAT = "extraShoplat";
+    public static final String EXTRA_PLACE_LONG = "extraShoplong";
+    public static final String EXTRA_PLACE_DESC = "extraShopdesc";
     public static final int SHOP_RESULT_CODE = 2001;
 
     public static final int PLACES_SHOP = 1;
@@ -39,4 +42,5 @@ public final class AppConstants {
     public static final String EXTRA_GPS_APPOINTMENT = "ExtraGps";
 
     public static final String EXTRA_LIST_ID = "ExtraListId";
+    public static final String EXTRA_LIST_ID2 = "wx";
 }

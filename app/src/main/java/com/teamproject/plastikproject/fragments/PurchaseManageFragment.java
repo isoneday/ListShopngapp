@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.teamproject.plastikproject.R;
 import com.teamproject.plastikproject.adapters.PurchaseListAdapter;
@@ -24,6 +25,17 @@ import com.teamproject.plastikproject.helpers.AppConstants;
 import com.teamproject.plastikproject.helpers.ContentHelper;
 import com.teamproject.plastikproject.helpers.ShoppingContentProvider;
 import com.teamproject.plastikproject.helpers.SqlDbHelper;
+import com.teamproject.plastikproject.modeldataskedule.ResponseDataSkeduleuser;
+import com.teamproject.plastikproject.modeldataskedule.Responsedaske;
+import com.teamproject.plastikproject.plastik.helper.SessionManager;
+import com.teamproject.plastikproject.plastik.network.MyRetrofitClient;
+import com.teamproject.plastikproject.plastik.network.RestApi;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by rage on 08.02.15. Create by task: 004
@@ -39,6 +51,7 @@ public class PurchaseManageFragment extends BaseFragment implements LoaderManage
     private PurchaseListAdapter adapter;
     private Parcelable purchaseViewState;
     private boolean showFabPlus;
+    private List<Responsedaske> dataskedule;
 
     /*public static PurchaseManageFragment newInstance(int menuItemId) {
         PurchaseManageFragment fragment = new PurchaseManageFragment();
@@ -70,14 +83,33 @@ public class PurchaseManageFragment extends BaseFragment implements LoaderManage
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        progressBar.setVisibility(View.VISIBLE);
+    //    progressBar.setVisibility(View.VISIBLE);
+        RestApi api = MyRetrofitClient.getInstaceRetrofit();
+        SessionManager manager = new SessionManager(getActivity());
+        String id =manager.getIdUser();
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            adapter = new PurchaseListAdapter(getContext(), null, R.layout.item_purchase_view);
-        } else {
-            adapter = new PurchaseListAdapter(getContext(), null, 0, R.layout.item_purchase_view);
-        }
-        purchaseView.setAdapter(adapter);
+        Call<ResponseDataSkeduleuser> userCall =api.getdataskeduleuser(id);
+        userCall.enqueue(new Callback<ResponseDataSkeduleuser>() {
+            @Override
+            public void onResponse(Call<ResponseDataSkeduleuser> call, Response<ResponseDataSkeduleuser> response) {
+                if (response.isSuccessful()){
+                    Toast.makeText(getActivity(), "ada data skedule", Toast.LENGTH_SHORT).show();
+                    dataskedule =response.body().getResponse();
+                 }else{
+                    Toast.makeText(getActivity(), "tidak ada data skedule", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseDataSkeduleuser> call, Throwable t) {
+                Toast.makeText(getActivity(), "gagal ya "+t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+
         purchaseView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -87,7 +119,7 @@ public class PurchaseManageFragment extends BaseFragment implements LoaderManage
             }
         });
 
-        getLoaderManager().initLoader(0, null, this);
+     //   getLoaderManager().initLoader(0, null, this);
 
         //Show edit fragment
         floatPlus.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +128,12 @@ public class PurchaseManageFragment extends BaseFragment implements LoaderManage
                 purchaseListMainFragmentListener.onPurchaseListMainFragmentClickListener();
             }
         });
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+//            adapter = new PurchaseListAdapter(getContext(), null, R.layout.item_purchase_view);
+//        } else {
+//            adapter = new PurchaseListAdapter(getContext(), null, 0, R.layout.item_purchase_view);
+//        }
+        purchaseView.setAdapter(adapter);
 
         purchaseView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -195,18 +233,18 @@ public class PurchaseManageFragment extends BaseFragment implements LoaderManage
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        adapter.changeCursor(data);
-        if (purchaseViewState != null) {
-            purchaseView.onRestoreInstanceState(purchaseViewState);
-        }
-        purchaseViewState = null;
-
-        progressBar.setVisibility(View.GONE);
+//        adapter.changeCursor(data);
+//        if (purchaseViewState != null) {
+//            purchaseView.onRestoreInstanceState(purchaseViewState);
+//        }
+//        purchaseViewState = null;
+//
+//        progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        adapter.changeCursor(null);
+    //    adapter.changeCursor(null);
     }
 
     public interface OnPurchaseListMainFragmentListener {

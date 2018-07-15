@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "989858937780",
+    "firebase_url": "https://plastik-6e8cf.firebaseio.com",
+    "project_id": "plastik-6e8cf",
+    "storage_bucket": "plastik-6e8cf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:989858937780:android:fa1603084cf63e5c",
+        "android_client_info": {
+          "package_name": "com.teamproject.plastikproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "989858937780-b3ipolvvcn3f9v22rape15sl2dhvvds3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teamproject.plastikproject",
+            "certificate_hash": "5c6fc12c1fc3e1913ce33a2bd2634d953f5d6f72"
+          }
+        },
+        {
+          "client_id": "989858937780-kvcevf8u11j8gh960326n3rs3vmvr72k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTO3szdhEWHD2thZS110I-Uy5YFqpUnRs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "989858937780-kvcevf8u11j8gh960326n3rs3vmvr72k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Pumpkin List (coming)</string>
+    <string name="app_name">Baggit app</string>
     <string name="action_settings">Settings</string>
     <string name="action_logout">Logout</string>
     <string name="action_shops">Shop manage</string>
@@ -97,5 +97,61 @@
     <!--Notification-->
     <string name="notification_alarm_description">Time for shopping</string>
     <string name="notification_gps_description">Do not forget about shopping</string>
+    <string name="by_creating_an_account_you_agree_term">By creating an account you agree <u>Term</u></string>
+    <string name="facebook_app_id">225971688167097</string>
+    <string name="fb_login_protocol_scheme">fb225971688167097</string>
+    <string name="fragment_login_password_hint">inputkan password</string>
+    <string name="fragment_login_passfiword_hintcon">inputkan password confirm</string>
 
+    <string name="loading">lagi loading</string>
+    <string name="title_activity_makanan">MakananActivity</string>
+    <string name="three">three</string>
+    <string name="one">one</string>
+    <string name="two">two</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_categories">Notification</string>
+    <string name="menu_services">Help</string>
+    <string name="menu_account">Account</string>
+    <string name="text_favorites">Favorites</string>
+    <string name="text_schedules">Schedules</string>
+    <string name="text_music">Music</string>
+
+    <string name="title_shop">Shop</string>
+    <string name="title_gifts">Gifts</string>
+    <string name="title_cart">Cart</string>
+    <string name="title_profile">Profile</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_halaman_bagging">HalamanBaggingActivity</string>
+
+
+    <string name="title_alarmitem_detail">Alarm</string>
+    <string name="pm">PM</string>
+    <string name="am">AM</string>
+    <string name="repeatCheckBoxText">Repeat</string>
+    <string name="days_of_week_letters">MTWTFSS</string>
+    <string name="alarmLabelBoxHint">label</string>
+    <string name="title_set_tag">Set Tag</string>
+    <string name="tapToCancel">Tap to Cancel</string>
+    <string name="noTagSet">No Tag set</string>
+    <string name="noNfcTagMessage">No Nfc tag set. Please set one.</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="wrongTagToast">Wrong Tag.</string>
+    <string name="alarm">Alarm!!!</string>
+    <string name="noneAlarmTone">None</string>
+    <string name="selectAlarmToneTitle">Alarm</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_night_killer">Night Killer</string>
+    <string name="use24HoursTitle">Display in 24 Hours.</string>
+    <string name="vibrate">Vibrate</string>
+    <string name="overrideAlarmVolumeTitle">Override alarm volume.</string>
+    <string name="overrideAlarmVolumeDescription">Sets the alarm to full value when it\'s triggered.</string>
+    <string name="warningText">CAUTION: Do not use NFC Tags which change their id every time they get reed.</string>
+    <string name="unlockInfoText">Unlock screen, and enable NFC.</string>
+    <string name="defaultRingTone">Default</string>
+    <string name="alarmSaved">Alarm Saved</string>
+    <string name="ignoreNfcTagIdTitle">Ignore NFC tag ID</string>
+    <string name="ignoreNfcTagIdSummary">If this is set Terminightor will not check the ID of an Nfc tag, when switching an alarm off.</string>
 </resources>

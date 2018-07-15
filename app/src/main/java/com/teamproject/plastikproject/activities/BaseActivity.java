@@ -12,14 +12,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.teamproject.plastikproject.R;
 import com.teamproject.plastikproject.adapters.DrawerMenuAdapter;
 import com.teamproject.plastikproject.helpers.ActivityHelper;
 import com.teamproject.plastikproject.helpers.AppConstants;
 import com.teamproject.plastikproject.helpers.SharedPrefHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by rage on 06.02.15.
@@ -184,14 +184,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void menuManageShop() {
-        Intent intent = new Intent(this, PlacesActivity.class);
+        Intent intent = new Intent(this, PlacesActivityOri.class);
         intent.putExtra(AppConstants.EXTRA_MENU_ITEM, AppConstants.MENU_SHOW_SHOPS);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 
     public void menuManagePlaces() {
-        Intent intent = new Intent(this, PlacesActivity.class);
+        Intent intent = new Intent(this, PlacesActivityOri.class);
         intent.putExtra(AppConstants.EXTRA_MENU_ITEM, AppConstants.MENU_SHOW_PLACES);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);

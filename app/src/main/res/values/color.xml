@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="theme_accent">#ffffa520</color>
-    <color name="theme_primary">#ffef8200</color>
+    <color name="birutuaa">#5EB1CB</color>
+    <color name="colorPrimary">#68B3CF</color>
+    <color name="colorPrimaryDark">#68B3CF</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="theme_accent">#68B3CF</color>
+    <color name="theme_primary">#68B3CF</color>
     <color name="theme_primary_dark">#ffcd7226</color>
-
+    <color name="warnabutton">#44515B</color>
     <color name="theme_toolbar_hint">#d4e3c09a</color>
-
+    <color name="hijau">#84A85D</color>
     <color name="theme_primary_text">#212121</color>
     <color name="theme_primary_lite_text">#666666</color>
     <color name="theme_secondary_text">#dec8c8c8</color>
     <color name="theme_divider">#B6B6B6</color>
-
+<color name="abuabu">#E5E9F0</color>
     <color name="theme_background">#fff1eee8</color>
 
     <color name="gray_overlay">#09000000</color>
+    <color name="birumuda">#E0F4FC</color>
+    <color name="birutua">#68B3CF</color>
+    <color name="hitamtua">#45525C</color>
+    <color name="birujg">#5AB5D2</color>
+    <color name="white">#FFFFFF</color>
+    <color name="bgBottomNavigation">#fe485a</color>
+    <color name="generalColor">#21002F</color>
+    <color name="fabButtonColor">#cc0000</color>
+
 </resources>

@@ -8,6 +8,7 @@ import com.teamproject.plastikproject.fragments.PlacesManageFragment;
 import com.teamproject.plastikproject.helpers.ActivityHelper;
 import com.teamproject.plastikproject.helpers.AppConstants;
 
+
 /**
  * Created by rage on 08.02.15. Create by task: 004
  */

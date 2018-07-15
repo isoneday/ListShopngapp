@@ -7,10 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.List;
-
 import com.teamproject.plastikproject.R;
 import com.teamproject.plastikproject.model.PlacesModel;
+
+import java.util.List;
 
 /**
  * Created by rage on 3/4/15.
@@ -20,6 +20,7 @@ public class PlaceAdapter extends BaseAdapter {
     private Context context;
     private int resource;
     private List<PlacesModel> shopLists;
+  //  private List<Response> shopLists;
     private LayoutInflater inflater;
 
     public PlaceAdapter(Context context, int resource, List<PlacesModel> shopLists) {
@@ -41,7 +42,7 @@ public class PlaceAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return shopLists.get(position).getServerId();
+        return shopLists.get(position).getDbId();
     }
 
     @Override
@@ -56,7 +57,7 @@ public class PlaceAdapter extends BaseAdapter {
         } else {
             holder = (Holder) convertView.getTag();
         }
-        holder.title.setText(shop.getShopName());
+        holder.title.setText(shop.getShopDescription());
         return convertView;
     }
 

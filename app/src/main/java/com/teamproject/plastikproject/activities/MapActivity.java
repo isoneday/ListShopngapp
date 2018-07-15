@@ -5,14 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
 import android.location.Address;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -23,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,18 +28,23 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import com.teamproject.plastikproject.R;
 import com.teamproject.plastikproject.helpers.AppConstants;
-import com.teamproject.plastikproject.helpers.ContentHelper;
-import com.teamproject.plastikproject.helpers.SqlDbHelper;
 import com.teamproject.plastikproject.model.PlacesModel;
-import com.teamproject.plastikproject.helpers.ShoppingContentProvider;
+import com.teamproject.plastikproject.modeladdlokasi.ResponseAddLokasi;
+import com.teamproject.plastikproject.modeldatalokasi.ResponseDelete;
+import com.teamproject.plastikproject.modelupdatelokasi.ResponseUpdatelokasi;
+import com.teamproject.plastikproject.plastik.network.MyRetrofitClient;
+import com.teamproject.plastikproject.plastik.network.RestApi;
 import com.teamproject.plastikproject.services.GeoLocationService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by rage on 3/3/15.
- *
+ * <p>
  * Used for show and choose places on map
  */
 public class MapActivity extends BaseActivity implements OnMapReadyCallback {
@@ -55,7 +54,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     private static final String IS_EDIT_STATE = "isEditState";
     private int menuItemId = -1;
     private long dbId = -1;
+    private String iddata;
     private PlacesModel placesModel;
+    com.teamproject.plastikproject.modeldatalokasi.Response dataplacesmodel;
     private GoogleMap map;
     private EditText placeNameEdit;
     private boolean isEdit = false;
@@ -66,11 +67,15 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     private EditText editSearch;
     private View progressBar;
     private GeoBroadcast geoBroadcast;
+    private Double latdata, londata;
+    String deskripdata;
+    private boolean bool;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        dataplacesmodel = new com.teamproject.plastikproject.modeldatalokasi.Response();
 
         geoBroadcast = new GeoBroadcast();
         IntentFilter intentFilter = new IntentFilter(GeoLocationService.GEO_LOCATION_BROADCAST);
@@ -111,7 +116,15 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
         if (args != null) {
             menuItemId = args.getExtras().getInt(AppConstants.EXTRA_MENU_ITEM);
+            iddata = args.getStringExtra(AppConstants.EXTRA_PLACE_ID);
+            isEdit = args.getBooleanExtra("bool", false);
+            latdata = args.getDoubleExtra(AppConstants.EXTRA_PLACE_LAT, 0);
+            londata = args.getDoubleExtra(AppConstants.EXTRA_PLACE_LONG, 0);
+            deskripdata = args.getStringExtra(AppConstants.EXTRA_PLACE_DESC);
             dbId = args.getExtras().getLong(AppConstants.EXTRA_PLACE_ID, -1);
+            placeNameEdit.setText(deskripdata);
+            String data = String.valueOf(dbId);
+            //       iddata = args.getIntExtra(AppConstants.EXTRA_PLACE_ID,0);
         }
 
     }
@@ -119,27 +132,46 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-
-        placesModel = savedInstanceState.getParcelable(PLACE_STATE);
+//versi lokal
+//        placesModel = savedInstanceState.getParcelable(PLACE_STATE);
+        //versiwebser
+        dataplacesmodel = savedInstanceState.getParcelable(PLACE_STATE);
         isEdit = savedInstanceState.getBoolean(IS_EDIT_STATE);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+//versi lokal
+//        if (placesModel != null) {
+//            initScreen();
+//        }
+        //versi webser
+        dataplacesmodel = new com.teamproject.plastikproject.modeldatalokasi.Response();
 
-        if (placesModel != null) {
+        if (dataplacesmodel != null) {
             initScreen();
         } else if (dbId >= 0) {
             Bundle bundle = new Bundle();
             bundle.putLong(ID_ARG, dbId);
-            getSupportLoaderManager().initLoader(0, bundle, loaderCallbacks);
+
+            //      getSupportLoaderManager().initLoader(0, bundle, loaderCallbacks);
         } else {
-            placesModel = new PlacesModel();
+            //versilokal
+//            placesModel = new PlacesModel();
+//            if (menuItemId == AppConstants.MENU_SHOW_SHOPS) {
+//                placesModel.setCategory(AppConstants.PLACES_SHOP);
+//            } else if (menuItemId == AppConstants.MENU_SHOW_PLACES) {
+//                placesModel.setCategory(AppConstants.PLACES_USER);
+//            } else {
+//                finish();
+//            }
+//            initScreen();
+            //versi webser
             if (menuItemId == AppConstants.MENU_SHOW_SHOPS) {
-                placesModel.setCategory(AppConstants.PLACES_SHOP);
+                dataplacesmodel.setId(String.valueOf(AppConstants.PLACES_SHOP));
             } else if (menuItemId == AppConstants.MENU_SHOW_PLACES) {
-                placesModel.setCategory(AppConstants.PLACES_USER);
+                dataplacesmodel.setId(String.valueOf(AppConstants.PLACES_USER));
             } else {
                 finish();
             }
@@ -180,39 +212,39 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         map.setOnMarkerDragListener(markerDragListener);*/
     }
 
-    private void readPlaceModel(Cursor cursor) {
-        if (cursor.getCount() != 0) {
-            cursor.moveToFirst();
-            int indexId = cursor.getColumnIndex(SqlDbHelper.COLUMN_ID);
-            int indexServerId = cursor.getColumnIndex(SqlDbHelper.PLACES_COLUMN_PLACES_ID);
-            int indexCategory = cursor.getColumnIndex(SqlDbHelper.PLACES_COLUMN_CATEGORY);
-            int indexName = cursor.getColumnIndex(SqlDbHelper.PLACES_COLUMN_NAME);
-            int indexDescription = cursor.getColumnIndex(SqlDbHelper.PLACES_COLUMN_DESCRIPTION);
-            int indexLatitude = cursor.getColumnIndex(SqlDbHelper.PLACES_COLUMN_LATITUDE);
-            int indexLongitude = cursor.getColumnIndex(SqlDbHelper.PLACES_COLUMN_LONGITUDE);
-            int indexIsDelete = cursor.getColumnIndex(SqlDbHelper.PLACES_COLUMN_IS_DELETE);
-            int indexTimestamp = cursor.getColumnIndex(SqlDbHelper.PLACES_COLUMN_TIMESTAMP);
-            placesModel = new PlacesModel(
-                    cursor.getLong(indexId),
-                    cursor.getLong(indexServerId),
-                    cursor.getLong(indexCategory),
-                    cursor.getString(indexName),
-                    cursor.getString(indexDescription),
-                    cursor.getDouble(indexLatitude),
-                    cursor.getDouble(indexLongitude),
-                    cursor.getInt(indexIsDelete) > 0,
-                    cursor.getLong(indexTimestamp)
-            );
-            cursor.close();
-            isEdit = true;
-
-            initScreen();
-
-            placeNameEdit.setText(placesModel.getShopName());
-        } else {
-            finish();
-        }
-    }
+//    private void readPlaceModel(Cursor cursor) {
+//        if (cursor.getCount() != 0) {
+//            cursor.moveToFirst();
+//            int indexId = cursor.getColumnIndex(SqlDbHelper.COLUMN_ID);
+//            int indexServerId = cursor.getColumnIndex(SqlDbHelper.PLACES_COLUMN_PLACES_ID);
+//            int indexCategory = cursor.getColumnIndex(SqlDbHelper.PLACES_COLUMN_CATEGORY);
+//            int indexName = cursor.getColumnIndex(SqlDbHelper.PLACES_COLUMN_NAME);
+//            int indexDescription = cursor.getColumnIndex(SqlDbHelper.PLACES_COLUMN_DESCRIPTION);
+//            int indexLatitude = cursor.getColumnIndex(SqlDbHelper.PLACES_COLUMN_LATITUDE);
+//            int indexLongitude = cursor.getColumnIndex(SqlDbHelper.PLACES_COLUMN_LONGITUDE);
+//            int indexIsDelete = cursor.getColumnIndex(SqlDbHelper.PLACES_COLUMN_IS_DELETE);
+//            int indexTimestamp = cursor.getColumnIndex(SqlDbHelper.PLACES_COLUMN_TIMESTAMP);
+//            placesModel = new PlacesModel(
+//                    cursor.getLong(indexId),
+//                    cursor.getLong(indexServerId),
+//                    cursor.getLong(indexCategory),
+//                    cursor.getString(indexName),
+//                    cursor.getString(indexDescription),
+//                    cursor.getDouble(indexLatitude),
+//                    cursor.getDouble(indexLongitude),
+//                    cursor.getInt(indexIsDelete) > 0,
+//                    cursor.getLong(indexTimestamp)
+//            );
+//            cursor.close();
+//            isEdit = true;
+//
+//            initScreen();
+//
+//            placeNameEdit.setText(placesModel.getShopName());
+//        } else {
+//            finish();
+//        }
+//    }
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
@@ -220,10 +252,21 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         //fix map crash - need test!
         map = googleMap;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
         map.setMyLocationEnabled(true);
         map.setOnMarkerDragListener(markerDragListener);
-
-        if (placesModel.getGpsLatitude() > 0 && placesModel.getGpsLongitude() > 0) {
+//versi lokal
+//        if (placesModel.getGpsLatitude() > 0 && placesModel.getGpsLongitude() > 0) {
+//            /*marker = map.addMarker(new MarkerOptions()
+//                    .position(new LatLng(
+//                            placesModel.getGpsLatitude(),
+//                            placesModel.getGpsLongitude()
+//                    ))
+//                    .draggable(false));*/
+//
+//            LatLng latLng = new LatLng(placesModel.getGpsLatitude(), placesModel.getGpsLongitude());
+        //versi webser
+        if (isEdit == true) {
             /*marker = map.addMarker(new MarkerOptions()
                     .position(new LatLng(
                             placesModel.getGpsLatitude(),
@@ -231,10 +274,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                     ))
                     .draggable(false));*/
 
-            LatLng latLng = new LatLng(placesModel.getGpsLatitude(), placesModel.getGpsLongitude());
+            LatLng latLng = new LatLng(latdata, londata);
             addMarker(latLng);
             showMyLocation(latLng);
             isOnceShowMyLocation = true;
+
         }
 
         googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
@@ -340,12 +384,33 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                         .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 if (isEdit) {
-                                    new Thread(new Runnable() {
+                                    RestApi api =MyRetrofitClient.getInstaceRetrofit();
+                                    Call<ResponseDelete> call =api.deletedatalokasi(iddata);
+                                    call.enqueue(new Callback<ResponseDelete>() {
                                         @Override
-                                        public void run() {
-                                            ContentHelper.deletePlace(MapActivity.this, placesModel.getDbId());
+                                        public void onResponse(Call<ResponseDelete> call, Response<ResponseDelete> response) {
+                                            if (response.isSuccessful()){
+                                                Toast.makeText(MapActivity.this, "berhasil hapus data", Toast.LENGTH_SHORT).show();
+                                            }else{
+                                                Toast.makeText(MapActivity.this, "gagal hapus data", Toast.LENGTH_SHORT).show();
+
+                                            }
                                         }
-                                    }).start();
+
+                                        @Override
+                                        public void onFailure(Call<ResponseDelete> call, Throwable t) {
+                                            Toast.makeText(MapActivity.this, "gagaalllll"+t.getMessage(), Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    });
+//                                    new Thread(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//
+//                                            ContentHelper.deletePlace(MapActivity.this, placesModel.getDbId());
+//                                            ContentHelper.deletePlace(MapActivity.this, placesModel.getDbId());
+//                                        }
+//                                    }).start();
                                 }
                                 finish();
                             }
@@ -367,59 +432,145 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
     @Override
     public void onBackPressed() {
-        if (!isEdit && marker != null) {
+        if (isEdit == false && marker != null) {
+            Toast.makeText(this, "simpan", Toast.LENGTH_SHORT).show();
+            //versi lokal
+//            if (TextUtils.isEmpty(placeNameEdit.getText().toString())) {
+//                if (menuItemId == AppConstants.MENU_SHOW_SHOPS) {
+//                    placesModel.setShopName(getString(R.string.shop_edit_new_shop_default));
+//                } else if (menuItemId == AppConstants.MENU_SHOW_PLACES) {
+//                    placesModel.setShopName(getString(R.string.place_edit_new_place_default));
+//                }
+//            } else {
+//                placesModel.setShopName(placeNameEdit.getText().toString());
+//            }
+            //versi webser
             if (TextUtils.isEmpty(placeNameEdit.getText().toString())) {
                 if (menuItemId == AppConstants.MENU_SHOW_SHOPS) {
-                    placesModel.setShopName(getString(R.string.shop_edit_new_shop_default));
+                    dataplacesmodel.setDescription(getString(R.string.shop_edit_new_shop_default));
                 } else if (menuItemId == AppConstants.MENU_SHOW_PLACES) {
-                    placesModel.setShopName(getString(R.string.place_edit_new_place_default));
+                    dataplacesmodel.setDescription(getString(R.string.place_edit_new_place_default));
                 }
             } else {
-                placesModel.setShopName(placeNameEdit.getText().toString());
+                dataplacesmodel.setDescription(placeNameEdit.getText().toString());
             }
-            placesModel.setGpsLatitude(marker.getPosition().latitude);
-            placesModel.setGpsLongitude(marker.getPosition().longitude);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    ContentHelper.insertPlace(MapActivity.this, placesModel);
-                }
-            }).start();
+            //versi lokal
+//            placesModel.setGpsLatitude(marker.getPosition().latitude);
+//            placesModel.setGpsLongitude(marker.getPosition().longitude);
+            //todo tambahan add
+            savekesever();
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    //versi lokal
+//                    //   ContentHelper.insertPlace(MapActivity.this, dataplacesmodel);
+//                    //versi webser
+//                 //   savekesever();
+//                }
+//            }).start();
         } else if (!isEdit) {
             Toast.makeText(this, R.string.map_save_empty_location, Toast.LENGTH_SHORT).show();
         }
-        if (isEdit) {
+        if (isEdit == true) {
             savePosition();
         }
         super.onBackPressed();
     }
 
-    private void savePosition() {
-        if (isEdit) {
-            if (marker != null
-                    && (placesModel.getGpsLatitude() != marker.getPosition().latitude
-                    || placesModel.getGpsLongitude() != marker.getPosition().longitude)) {
-                needSave = true;
-                placesModel.setGpsLatitude(marker.getPosition().latitude);
-                placesModel.setGpsLongitude(marker.getPosition().longitude);
-            }
-            if (!TextUtils.equals(placeNameEdit.getText().toString(), placesModel.getShopName())
-                    || TextUtils.isEmpty(placeNameEdit.getText().toString())) {
-                needSave = true;
-                if (TextUtils.isEmpty(placeNameEdit.getText().toString())) {
-                    placesModel.setShopName(getString(R.string.shop_edit_new_shop_default));
+    private void savekesever() {
+        RestApi api = MyRetrofitClient.getInstaceRetrofit();
+        String lon = String.valueOf(marker.getPosition().longitude);
+        String lat = String.valueOf(marker.getPosition().latitude);
+        Call<ResponseAddLokasi> addLokasiCall = api.addlokasi(lon,
+                lat, placeNameEdit.getText().toString());
+
+        addLokasiCall.enqueue(new Callback<ResponseAddLokasi>() {
+            @Override
+            public void onResponse(Call<ResponseAddLokasi> call, Response<ResponseAddLokasi> response) {
+                if (response.isSuccessful()) {
+                    int resultok = response.body().getResponse().getResult().getOk();
+                    if (resultok == 1) {
+                        Toast.makeText(MapActivity.this, "berhasil" + "\n" + response.body().getResponse(), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(MapActivity.this, "maaf gagal", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    placesModel.setShopName(placeNameEdit.getText().toString());
+                    Toast.makeText(MapActivity.this, "gagal ambil data", Toast.LENGTH_SHORT).show();
                 }
             }
-            if (needSave) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ContentHelper.updatePlace(MapActivity.this, placesModel);
-                    }
-                }).start();
+
+            @Override
+            public void onFailure(Call<ResponseAddLokasi> call, Throwable t) {
+                Toast.makeText(MapActivity.this, "gagal ya" + t.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
+        });
+    }
+
+    //update data
+    private void savePosition() {
+        if (isEdit) {
+            Toast.makeText(this, "edit", Toast.LENGTH_SHORT).show();
+
+//            if (marker != null
+//                    && (placesModel.getGpsLatitude() != marker.getPosition().latitude
+//                    || placesModel.getGpsLongitude() != marker.getPosition().longitude)) {
+//                needSave = true;
+//                placesModel.setGpsLatitude(marker.getPosition().latitude);
+//                placesModel.setGpsLongitude(marker.getPosition().longitude);
+            RestApi api = MyRetrofitClient.getInstaceRetrofit();
+            Log.d("datalat", String.valueOf(marker.getPosition().latitude));
+            Log.d("datalon", String.valueOf(marker.getPosition().longitude));
+            String lati = String.valueOf(marker.getPosition().latitude);
+            String longi = String.valueOf(marker.getPosition().longitude);
+          String text=placeNameEdit.getText().toString();
+            Call<ResponseUpdatelokasi> call = api.updatelokasi(longi,
+                    lati
+                    ,text
+                    ,iddata);
+            call.enqueue(new Callback<ResponseUpdatelokasi>() {
+                @Override
+                public void onResponse(Call<ResponseUpdatelokasi> call, Response<ResponseUpdatelokasi> response) {
+                    if (response.isSuccessful()) {
+                        int okrespo = response.body().getResponse().getOk();
+                        if (okrespo == 1) {
+                            Toast.makeText(MapActivity.this, "update berhasil", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            Toast.makeText(MapActivity.this, "gagal update 1", Toast.LENGTH_SHORT).show();
+
+                        }
+                    } else {
+                        Toast.makeText(MapActivity.this, "gagal update 2", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseUpdatelokasi> call, Throwable t) {
+                    Toast.makeText(MapActivity.this, "gagal ya " + t.getMessage(), Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+            //}
+//            if (!TextUtils.equals(placeNameEdit.getText().toString(), placesModel.getShopName())
+//                    || TextUtils.isEmpty(placeNameEdit.getText().toString())) {
+//                needSave = true;
+//                if (TextUtils.isEmpty(placeNameEdit.getText().toString())) {
+//                    placesModel.setShopName(getString(R.string.shop_edit_new_shop_default));
+//                } else {
+//                    placesModel.setShopName(placeNameEdit.getText().toString());
+//                }
+//            }
+//            if (needSave) {
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        ContentHelper.updatePlace(MapActivity.this, placesModel);
+//                    }
+//                }).start();
+//            }
         }
     }
 
@@ -427,13 +578,21 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (!isEdit) {
-            if (placesModel != null) {
-                placesModel.setShopName(placeNameEdit.getText().toString());
+//            if (placesModel != null) {
+//                placesModel.setShopName(placeNameEdit.getText().toString());
+//                if (marker != null) {
+//                    placesModel.setGpsLatitude(marker.getPosition().latitude);
+//                    placesModel.setGpsLongitude(marker.getPosition().longitude);
+//                }
+//                outState.putParcelable(PLACE_STATE, placesModel);
+//            }
+            if (dataplacesmodel != null) {
+                dataplacesmodel.setDescription(placeNameEdit.getText().toString());
                 if (marker != null) {
-                    placesModel.setGpsLatitude(marker.getPosition().latitude);
-                    placesModel.setGpsLongitude(marker.getPosition().longitude);
+                    dataplacesmodel.setLat(marker.getPosition().latitude);
+                    dataplacesmodel.setLong(marker.getPosition().longitude);
                 }
-                outState.putParcelable(PLACE_STATE, placesModel);
+                outState.putParcelable(PLACE_STATE, dataplacesmodel);
             }
             outState.putBoolean(IS_EDIT_STATE, isEdit);
         } else {
@@ -447,44 +606,44 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         getSupportLoaderManager().destroyLoader(0);
         unregisterReceiver(geoBroadcast);
     }
-
-    private LoaderManager.LoaderCallbacks<Cursor> loaderCallbacks = new LoaderManager.LoaderCallbacks<Cursor>() {
-
-        @Override
-        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            long dbId = args.getLong(ID_ARG);
-            Uri uri = Uri.parse(ShoppingContentProvider.PLACE_CONTENT_URI + "/" + dbId);
-            String[] projection = {
-                    SqlDbHelper.COLUMN_ID,
-                    SqlDbHelper.PLACES_COLUMN_PLACES_ID,
-                    SqlDbHelper.PLACES_COLUMN_CATEGORY,
-                    SqlDbHelper.PLACES_COLUMN_NAME,
-                    SqlDbHelper.PLACES_COLUMN_DESCRIPTION,
-                    SqlDbHelper.PLACES_COLUMN_LATITUDE,
-                    SqlDbHelper.PLACES_COLUMN_LONGITUDE,
-                    SqlDbHelper.PLACES_COLUMN_IS_DELETE,
-                    SqlDbHelper.PLACES_COLUMN_TIMESTAMP,
-            };
-            return new CursorLoader(
-                    MapActivity.this,
-                    uri,
-                    projection,
-                    null,
-                    null,
-                    null
-            );
-        }
-
-        @Override
-        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            readPlaceModel(data);
-        }
-
-        @Override
-        public void onLoaderReset(Loader<Cursor> loader) {
-
-        }
-    };
+//proses getdata dari local
+//    private LoaderManager.LoaderCallbacks<Cursor> loaderCallbacks = new LoaderManager.LoaderCallbacks<Cursor>() {
+//
+//        @Override
+//        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+//            long dbId = args.getLong(ID_ARG);
+//            Uri uri = Uri.parse(ShoppingContentProvider.PLACE_CONTENT_URI + "/" + dbId);
+//            String[] projection = {
+//                    SqlDbHelper.COLUMN_ID,
+//                    SqlDbHelper.PLACES_COLUMN_PLACES_ID,
+//                    SqlDbHelper.PLACES_COLUMN_CATEGORY,
+//                    SqlDbHelper.PLACES_COLUMN_NAME,
+//                    SqlDbHelper.PLACES_COLUMN_DESCRIPTION,
+//                    SqlDbHelper.PLACES_COLUMN_LATITUDE,
+//                    SqlDbHelper.PLACES_COLUMN_LONGITUDE,
+//                    SqlDbHelper.PLACES_COLUMN_IS_DELETE,
+//                    SqlDbHelper.PLACES_COLUMN_TIMESTAMP,
+//            };
+//            return new CursorLoader(
+//                    MapActivity.this,
+//                    uri,
+//                    projection,
+//                    null,
+//                    null,
+//                    null
+//            );
+//        }
+//
+//        @Override
+//        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+//            readPlaceModel(data);
+//        }
+//
+//        @Override
+//        public void onLoaderReset(Loader<Cursor> loader) {
+//
+//        }
+//    };
 
     private void searchLocationAction(String searchString) {
         if (!TextUtils.isEmpty(searchString)) {
@@ -521,7 +680,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                     Toast.makeText(MapActivity.this, R.string.map_search_fail, Toast.LENGTH_SHORT).show();
                 }
             }
-            if (placesModel != null && TextUtils.isEmpty(placesModel.getShopName()) && address != null) {
+            //versi lokal
+//            if (placesModel != null && TextUtils.isEmpty(placesModel.getShopName()) && address != null) {
+            //versi webser
+            if (dataplacesmodel != null && TextUtils.isEmpty(dataplacesmodel.getDescription()) && address != null) {
                 StringBuilder stringBuilder = new StringBuilder();
                 boolean addCity = true;
                 int count = address.getMaxAddressLineIndex();

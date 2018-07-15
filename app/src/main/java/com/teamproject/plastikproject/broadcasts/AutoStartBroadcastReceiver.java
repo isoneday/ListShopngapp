@@ -4,19 +4,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.location.Location;
-import android.util.Log;
+
+import com.teamproject.plastikproject.helpers.ShoppingContentProvider;
+import com.teamproject.plastikproject.helpers.SqlDbHelper;
+import com.teamproject.plastikproject.model.PurchaseListModelbar;
+import com.teamproject.plastikproject.services.GpsAppointmentService;
+import com.teamproject.plastikproject.utils.AlarmUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.teamproject.plastikproject.helpers.AppConstants;
-import com.teamproject.plastikproject.helpers.ShoppingContentProvider;
-import com.teamproject.plastikproject.helpers.SqlDbHelper;
-import com.teamproject.plastikproject.model.PurchaseListModel;
-import com.teamproject.plastikproject.services.GpsAppointmentService;
-import com.teamproject.plastikproject.utils.AlarmUtils;
-import com.teamproject.plastikproject.utils.Coordinate;
 
 /**
  * Created by rage on 3/29/15.
@@ -30,7 +26,7 @@ public class AutoStartBroadcastReceiver extends BroadcastReceiver {
     }
 
     private void startPurchaseListAlarm(Context context) {
-        List<PurchaseListModel> purchaseLists = new ArrayList<>();
+        List<PurchaseListModelbar> purchaseLists = new ArrayList<>();
         {
             String[] projection = {
                     SqlDbHelper.COLUMN_ID,
@@ -79,7 +75,7 @@ public class AutoStartBroadcastReceiver extends BroadcastReceiver {
                 int indexAlarm = cursor.getColumnIndex(SqlDbHelper.PURCHASE_LIST_COLUMN_TIME_ALARM);
                 int indexCreate = cursor.getColumnIndex(SqlDbHelper.PURCHASE_LIST_COLUMN_TIME_CREATE);
                 int indexTimestamp = cursor.getColumnIndex(SqlDbHelper.PURCHASE_LIST_COLUMN_TIMESTAMP);
-                PurchaseListModel listModel = new PurchaseListModel(
+                PurchaseListModelbar listModel = new PurchaseListModelbar(
                         cursor.getLong(indexId),
                         cursor.getLong(indexServerId),
                         cursor.getString(indexName),
@@ -105,7 +101,7 @@ public class AutoStartBroadcastReceiver extends BroadcastReceiver {
         }
 
         AlarmUtils alarmUtils = new AlarmUtils(context);
-        for (PurchaseListModel list : purchaseLists) {
+        for (PurchaseListModelbar list : purchaseLists) {
             alarmUtils.setListAlarm(list);
         }
     }

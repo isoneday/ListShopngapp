@@ -5,19 +5,20 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
+import com.teamproject.plastikproject.model.PlacesModel;
+import com.teamproject.plastikproject.model.PurchaseItemModel;
+import com.teamproject.plastikproject.model.PurchaseListModelbar;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamproject.plastikproject.model.PlacesModel;
-import com.teamproject.plastikproject.model.PurchaseItemModel;
-import com.teamproject.plastikproject.model.PurchaseListModel;
 
 /**
  * Created by rage on 3/21/15.
  */
 public class ContentHelper {
 
-    public static PurchaseListModel getPurchaseList(Cursor cursor) {
+    public static PurchaseListModelbar getPurchaseList(Cursor cursor) {
         cursor.moveToFirst();
         int indexId = cursor.getColumnIndex(SqlDbHelper.COLUMN_ID);
         int indexServerId = cursor.getColumnIndex(SqlDbHelper.PURCHASE_LIST_COLUMN_LIST_ID);
@@ -32,8 +33,8 @@ public class ContentHelper {
         int indexAlarm = cursor.getColumnIndex(SqlDbHelper.PURCHASE_LIST_COLUMN_TIME_ALARM);
         int indexCreate = cursor.getColumnIndex(SqlDbHelper.PURCHASE_LIST_COLUMN_TIME_CREATE);
         int indexTimestamp = cursor.getColumnIndex(SqlDbHelper.PURCHASE_LIST_COLUMN_TIMESTAMP);
-        PurchaseListModel listModel = new PurchaseListModel(
-                cursor.getLong(indexId),
+        PurchaseListModelbar listModel = new PurchaseListModelbar(
+                cursor.getInt(indexId),
                 cursor.getLong(indexServerId),
                 cursor.getString(indexName),
                 cursor.getInt(indexUser),
@@ -52,11 +53,11 @@ public class ContentHelper {
         return listModel;
     }
 
-    public static Uri insertPurchaseList(Context context, PurchaseListModel list) {
+    public static Uri insertPurchaseList(Context context, PurchaseListModelbar list) {
         ContentValues values = new ContentValues();
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_LIST_ID, list.getServerId());
-        values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_LIST_NAME, list.getListName());
-        values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_USER_ID, list.getUserId());
+        values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_LIST_NAME, list.getDay());
+        values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_USER_ID, list.getIdUser());
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_SHOP_ID, list.getShopId());
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_IS_USER_SHOP, list.isUserShop() ? 1 : 0);
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_PLACE_ID, list.getPlaceId());
@@ -66,7 +67,7 @@ public class ContentHelper {
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_MAX_PLACE_DISTANCE, list.getMaxPlaceDistance());
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_MAX_POINT_DISTANCE, list.getMaxPointDistance());
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_IS_ALARM, list.isAlarm() ? 1 : 0);
-        values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_TIME_ALARM, list.getTimeAlarm());
+        values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_TIME_ALARM, list.getTime());
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_TIME_CREATE, list.getTimeCreate());
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_TIMESTAMP, list.getTimeStamp());
         return context.getContentResolver().insert(
@@ -75,12 +76,12 @@ public class ContentHelper {
         );
     }
 
-    public static int updatePurchaseList(Context context, PurchaseListModel list) {
-        Uri uri = Uri.parse(ShoppingContentProvider.PURCHASE_LIST_CONTENT_URI + "/" + list.getDbId());
+    public static int updatePurchaseList(Context context, PurchaseListModelbar list) {
+        Uri uri = Uri.parse(ShoppingContentProvider.PURCHASE_LIST_CONTENT_URI + "/" + list.getIdUser());
         ContentValues values = new ContentValues();
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_LIST_ID, list.getServerId());
-        values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_LIST_NAME, list.getListName());
-        values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_USER_ID, list.getUserId());
+        values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_LIST_NAME, list.getDay());
+        values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_USER_ID, list.getIdUser());
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_SHOP_ID, list.getShopId());
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_IS_USER_SHOP, list.isUserShop() ? 1 : 0);
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_PLACE_ID, list.getPlaceId());
@@ -90,7 +91,7 @@ public class ContentHelper {
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_MAX_PLACE_DISTANCE, list.getMaxPlaceDistance());
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_MAX_POINT_DISTANCE, list.getMaxPointDistance());
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_IS_ALARM, list.isAlarm() ? 1 : 0);
-        values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_TIME_ALARM, list.getTimeAlarm());
+        values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_TIME_ALARM, list.getTime());
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_TIME_CREATE, list.getTimeCreate());
         values.put(SqlDbHelper.PURCHASE_LIST_COLUMN_TIMESTAMP, list.getTimeStamp());
         return context.getContentResolver().update(
@@ -101,9 +102,9 @@ public class ContentHelper {
         );
     }
 
-    public static int deletePurchaseList(Context context, PurchaseListModel list) {
-        deletePurchaseItems(context, list.getDbId());
-        Uri uri = Uri.parse(ShoppingContentProvider.PURCHASE_LIST_CONTENT_URI + "/" + list.getDbId());
+    public static int deletePurchaseList(Context context, PurchaseListModelbar list) {
+        deletePurchaseItems(context, list.getIdUser());
+        Uri uri = Uri.parse(ShoppingContentProvider.PURCHASE_LIST_CONTENT_URI + "/" + list.getIdUser());
         return context.getContentResolver().delete(
                 uri,
                 null,
@@ -166,6 +167,7 @@ public class ContentHelper {
     }
 
     public static long getDbId(Cursor cursor) {
+
         return cursor.getLong(cursor.getColumnIndexOrThrow(SqlDbHelper.COLUMN_ID));
     }
 

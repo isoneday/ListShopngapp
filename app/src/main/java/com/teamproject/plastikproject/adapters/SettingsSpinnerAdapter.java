@@ -7,22 +7,22 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.List;
-
 import com.teamproject.plastikproject.R;
-import com.teamproject.plastikproject.model.PlacesModel;
+import com.teamproject.plastikproject.modeldatalokasi.Response;
+
+import java.util.List;
 
 /**
  * Created by rage on 3/8/15.
  */
-public class SettingsSpinnerAdapter extends ArrayAdapter<PlacesModel> {
+public class SettingsSpinnerAdapter extends ArrayAdapter<Response> {
     private static final String TAG = SettingsSpinnerAdapter.class.getSimpleName();
-    private List<PlacesModel> placesList;
+    private List<Response> placesList;
     private int resource, resDefault;
     private LayoutInflater inflater;
     private View.OnClickListener settingsClickListener;
 
-    public SettingsSpinnerAdapter(Context context, int resource, List<PlacesModel> placesList, int resDefault) {
+    public SettingsSpinnerAdapter(Context context, int resource, List<Response> placesList, int resDefault) {
         super(context, resource, placesList);
         this.placesList = placesList;
         this.resource = resource;
@@ -40,12 +40,12 @@ public class SettingsSpinnerAdapter extends ArrayAdapter<PlacesModel> {
     }
 
     @Override
-    public PlacesModel getItem(int position) {
+    public Response getItem(int position) {
         return position == 0 ? null : placesList.get(position - 1);
     }
 
     @Override
-    public int getPosition(PlacesModel item) {
+    public int getPosition(Response item) {
         return placesList.indexOf(item) + 1;
     }
 
@@ -82,8 +82,8 @@ public class SettingsSpinnerAdapter extends ArrayAdapter<PlacesModel> {
             }
         } else {
             holder.settings.setVisibility(View.INVISIBLE);
-            PlacesModel shop = placesList.get(position - 1);
-            holder.title.setText(shop.getShopName());
+            Response shop = placesList.get(position - 1);
+            holder.title.setText(shop.getDescription());
         }
         return convertView;
     }

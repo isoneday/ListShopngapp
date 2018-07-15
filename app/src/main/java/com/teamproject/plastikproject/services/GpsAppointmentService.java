@@ -20,11 +20,6 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
 import com.teamproject.plastikproject.R;
 import com.teamproject.plastikproject.activities.PurchaseActivity;
 import com.teamproject.plastikproject.helpers.AppConstants;
@@ -32,6 +27,11 @@ import com.teamproject.plastikproject.helpers.ShoppingContentProvider;
 import com.teamproject.plastikproject.helpers.SqlDbHelper;
 import com.teamproject.plastikproject.model.PurchaseListModel;
 import com.teamproject.plastikproject.utils.Coordinate;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by rage on 3/14/15.
