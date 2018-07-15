@@ -872,6 +872,7 @@ public class PurchaseEditFragmentbaru extends BaseFragment implements LoaderMana
             c.set(mYear, mMonth, mDay, mHour, mMinute, 0);
             purchaseList.setTime(c.getTimeInMillis());
 //dsds
+            //dsdsds
             if (purchaseList.getIdUser() > 0) {
                 updateList();
                 AlarmUtils alarmUtils = new AlarmUtils(getContext());
