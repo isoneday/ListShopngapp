@@ -871,7 +871,7 @@ public class PurchaseEditFragmentbaru extends BaseFragment implements LoaderMana
             Calendar c = Calendar.getInstance();
             c.set(mYear, mMonth, mDay, mHour, mMinute, 0);
             purchaseList.setTime(c.getTimeInMillis());
-
+//dsds
             if (purchaseList.getIdUser() > 0) {
                 updateList();
                 AlarmUtils alarmUtils = new AlarmUtils(getContext());
