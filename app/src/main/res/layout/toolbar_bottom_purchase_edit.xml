@@ -97,6 +97,7 @@
                         android:text="@string/purchase_edit_bottom_set_date"
                         android:background="@drawable/background_normal"
                         android:padding="10dp"
+                        android:visibility="gone"
                         android:id="@+id/time_date"
                         android:gravity="center" />
 

@@ -69,6 +69,14 @@
         <service android:name=".services.GeoLocationService"
             android:exported="false"/>
 
+        <service android:name=".WritePurchaseListService"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.teamproject.plastikprojectku" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </service>
         <provider
             android:name=".helpers.ShoppingContentProvider"
             android:authorities="${applicationId}.provider"
@@ -130,7 +138,10 @@
         </receiver>
 
         <receiver android:name=".broadcasts.AlarmBroadcastReceiver" >
-
+            <intent-filter>
+                <action android:name="com.teamproject.plastikprojectku" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
         </receiver>
 
     </application>
